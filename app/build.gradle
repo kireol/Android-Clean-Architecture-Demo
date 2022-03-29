@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id("dagger.hilt.android.plugin")
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 apply plugin: 'kotlin-kapt'
 
@@ -23,7 +24,7 @@ android {
 
     buildTypes {
         debug{
-            resValue("string", "google_places_api_key", localProperties['PlacesApiKey'])
+            resValue("string", "google_api_key", localProperties['GOOGLE_API_KEY'])
         }
         release {
             minifyEnabled false

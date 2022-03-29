@@ -42,7 +42,6 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
         fastestInterval = 10
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         maxWaitTime = 60
-
     }
 
     private var locationCallback: LocationCallback = object : LocationCallback() {
@@ -59,7 +58,7 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        apikey.googlePlacesKey.postValue(resources.getString (R.string.google_places_api_key))
+        apikey.googlePlacesKey.postValue(resources.getString (R.string.google_api_key))
 
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
