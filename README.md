@@ -33,10 +33,9 @@ Run and install
 
 * data binding to recyclerview https://github.com/kozmi55/Flexible-RecyclerView-with-Databinding
 * 2 way data binding https://developer.android.com/topic/libraries/data-binding/two-way
-* jetpack - viewModel, livedata, lifecycle, nav graph, compose
-* diffutils algorithm in android in recycler view
-* pagination in recycler view
-* filter
+* diffutils algorithm in android in recycler view https://developer.android.com/codelabs/kotlin-android-training-diffutil-databinding#3
+* pagination in recycler view https://medium.com/dwarsoft/using-pagination-library-for-android-recycler-view-pagination-in-mvvm-architecture-8ae077c8ca48
+* filter https://medium.com/nerd-for-tech/implem-search-in-recyclerview-5bc18b547f4f
 * detekt  https://proandroiddev.com/how-to-use-detekt-in-a-multi-module-android-project-6781937fbef2  https://proandroiddev.com/detecting-kotlin-code-smells-with-detekt-e79c52a35faf
 * hide key using security https://developer.android.com/jetpack/androidx/releases/security
 * load more on scroll down https://stackoverflow.com/questions/26543131/how-to-implement-endless-list-with-recyclerview
