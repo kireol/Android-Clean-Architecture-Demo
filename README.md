@@ -17,20 +17,19 @@ Run and install
 
 ## Current Features
 
+* MVVM - mvvm pattern
+* Single Activity - fragments
+* Repository pattern - able to join data from multiple sources
 * All Kotlin - All code in Kotlin
 * Kotlin flow - Kotlin flow usage
 * Retrofit - API calls
 * Android Permission Requests
-* LiveData
-* MVVM - mvvm pattern
-* Single Activity - fragments
-* Repository pattern - able to join data from multiple sources
+* LiveData - for observing
 * Nav Graph - Nav between screens
 * ROOM DB - database/DAO/Layers for sqlite
 * Hilt - Dependency Injection
 
-
-## TODO: Things to work on next
+## TODO: Features to be added
 
 * data binding to recyclerview https://github.com/kozmi55/Flexible-RecyclerView-with-Databinding
 * 2 way data binding https://developer.android.com/topic/libraries/data-binding/two-way
