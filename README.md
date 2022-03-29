@@ -4,6 +4,25 @@ Clean code version of Android GPS Restaurant finder.  Kotlin, flow, coroutine, n
 Compile with Android Studio.  Bumblebee was used.
 
 
+## Current Features
+
+All Kotlin - All code in Kotlin
+
+Kotlin flow - Kotlin flow usage
+
+MVVM - mvvm pattern
+
+Single Activity - fragments
+
+Repository pattern - able to join data from multiple sources
+
+Nav Graph - Nav between screens
+
+ROOM DB - database/DAO/Layers for sqlite
+
+Hilt - Dependency Injection
+
+
 ## TODO: Things to work on next
 
 data binding to recyclerview https://github.com/kozmi55/Flexible-RecyclerView-with-Databinding
