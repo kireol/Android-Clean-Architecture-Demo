@@ -6,12 +6,11 @@ Compile with Android Studio.  Bumblebee was used.
 ## Installation
 Load project in Android Studio
 
-Edit local.properties
-
-Add a new line to the end of the file
+Edit local.properties add your api keys to the end of the file
 
 ```
-PlacesApiKey = YOUR API KEY HERE
+GOOGLE_MAPS_API_KEY = your api key
+GOOGLE_PLACES_API_KEY = your api key
 ```
 
 Run and install
