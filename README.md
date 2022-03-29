@@ -3,12 +3,30 @@ Clean code version of Android GPS Restaurant finder.  Kotlin, flow, coroutine, n
 
 Compile with Android Studio.  Bumblebee was used.
 
+## Installation
+Load project in Android Studio
+
+Edit local.properties
+
+Add a new line to the end of the file
+
+```
+apiKey = YOUR API KEY HERE
+```
+
+Run and install
 
 ## Current Features
 
 All Kotlin - All code in Kotlin
 
 Kotlin flow - Kotlin flow usage
+
+Retrofit - API calls
+
+Android Permission Requests
+
+LiveData
 
 MVVM - mvvm pattern
 
