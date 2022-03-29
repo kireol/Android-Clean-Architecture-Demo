@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
@@ -21,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.restraurantfinderapp.databinding.ActivityItemDetailBinding
+import com.example.restraurantfinderapp.restaurants.api.geogleplaces.ApiKeys
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,12 +33,16 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
     @Inject
     lateinit var lastLocation: GPSLocation
 
+    @Inject
+    lateinit var apikey: ApiKeys
+
     private var fusedLocationProvider: FusedLocationProviderClient? = null
     private val locationRequest: LocationRequest = LocationRequest.create().apply {
         interval = 30
         fastestInterval = 10
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         maxWaitTime = 60
+
     }
 
     private var locationCallback: LocationCallback = object : LocationCallback() {
@@ -54,6 +58,8 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        apikey.googlePlacesKey.postValue(resources.getString (R.string.google_api_key))
 
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)

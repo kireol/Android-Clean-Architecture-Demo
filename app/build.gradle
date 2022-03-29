@@ -5,6 +5,9 @@ plugins {
 }
 apply plugin: 'kotlin-kapt'
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdk 32
 
@@ -19,6 +22,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            resValue("string", "google_api_key", localProperties['apiKey'])
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

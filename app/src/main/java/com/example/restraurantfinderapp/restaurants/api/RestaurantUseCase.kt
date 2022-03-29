@@ -1,8 +1,6 @@
 package com.example.restraurantfinderapp.restaurants.api
 
-import android.content.Context
-import com.example.restraurantfinderapp.R
-import com.example.restraurantfinderapp.RestaurantFinderApplication
+import com.example.restraurantfinderapp.restaurants.api.geogleplaces.ApiKeys
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyRestaurantSearchResp
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import retrofit2.Callback
@@ -10,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class RestaurantUseCase @Inject constructor(private val gpsLocation: GPSLocation) {
+class RestaurantUseCase @Inject constructor(private val gpsLocation: GPSLocation, private val apiKeys: ApiKeys) {
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://maps.googleapis.com")
         .addConverterFactory(GsonConverterFactory.create())
@@ -30,7 +28,7 @@ class RestaurantUseCase @Inject constructor(private val gpsLocation: GPSLocation
             location,
             keyword,
             "restaurant",
-            "<YOUR GOOGLE API KEY>",
+            apiKeys.googlePlacesKey.value,
             "1500"
         )
         call?.enqueue(callback)
