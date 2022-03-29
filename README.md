@@ -11,7 +11,7 @@ Edit local.properties
 Add a new line to the end of the file
 
 ```
-apiKey = YOUR API KEY HERE
+PlacesApiKey = YOUR API KEY HERE
 ```
 
 Run and install
