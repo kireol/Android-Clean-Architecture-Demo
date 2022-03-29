@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Restaurant Finder App</string>
+    <string name="title_item_detail">Map Detail</string>
+    <string name="restaurant_icon">restaurant icon</string>
+    <string name="your_location">Your Location</string>
+    <string name="you_are_here">You are here</string>
+    <string name="send">Send</string>
+    <string name="search">Search …</string>
+    <string name="map">Map</string>
+    <string name="list">List</string>
+    <string name="list_button">>Go to list</string>
+    <string name="favorite_icon">favorite icon</string>
+    <string name="go_to_map">Go to map</string>
+    <string name="permission_dialog_title">Location Permission Needed</string>
+    <string name="permission_dialog_message">This app needs the Location permission, please accept to use location functionality</string>
+    <string name="ok">OK</string>
+    <string name="permission_denied">permission denied.  Restart app and allow location to use</string>
+    <string name="default_keyword">restaurant</string>
+    <string name="your_favorite">Your Favorite</string>
+    <string name="not_favorite">Not Favorite</string>
+    <string name="rating">Rating</string>
+</resources>

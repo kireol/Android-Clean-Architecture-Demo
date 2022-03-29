@@ -1,0 +1,18 @@
+package com.example.restraurantfinderapp.restaurants.api
+
+import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyRestaurantSearchResp
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface PlacesService {
+    @GET("/maps/api/place/nearbysearch/json?")
+    fun getRestaurants(
+        @Query("location") location: String?,
+        @Query("keyword") keyword: String?,
+        @Query("type") type: String?,
+        @Query("key") key: String?,
+        @Query("radius") radius: String?
+    ): Call<NearbyRestaurantSearchResp?>?
+
+}
