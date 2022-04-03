@@ -32,7 +32,7 @@ class BindableRecyclerViewAdapter @Inject constructor(private val onFavoriteChan
         super.onBindViewHolder(holder, position, payloads)
         holder.binding.favorite.setOnClickListener {
             onFavoriteChanged(position)
-            notifyDataSetChanged()
+            notifyItemChanged(position)
         }
     }
 
