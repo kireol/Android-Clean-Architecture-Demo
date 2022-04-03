@@ -29,7 +29,7 @@ class RestaurantListFragment : Fragment() {
 
     private val restaurantsViewModel: RestaurantListViewModel by activityViewModels()
 
-    var bindableRecyclerViewAdapter: BindableRecyclerViewAdapter =
+    private var bindableRecyclerViewAdapter: BindableRecyclerViewAdapter =
         BindableRecyclerViewAdapter { position -> restaurantsViewModel.favoriteClicked(position) }
 
     override fun onCreateView(

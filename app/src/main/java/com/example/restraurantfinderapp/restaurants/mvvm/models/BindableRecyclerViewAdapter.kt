@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class BindableRecyclerViewAdapter @Inject constructor(private val onFavoriteChanged: (Int) -> Unit) :
     RecyclerView.Adapter<BindableViewHolder>() {
-    var itemViewModels: List<ItemViewModel> = emptyList()
+    private var itemViewModels: List<ItemViewModel> = emptyList()
     private val viewTypeToLayoutId: MutableMap<Int, Int> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindableViewHolder {

@@ -32,7 +32,6 @@ Run and install
 * compose - programmatic layouts
 
 ## TODO: Features to be added
-flash on favorites
 pull to refresh not stopping
 move restaurants to a holder
 

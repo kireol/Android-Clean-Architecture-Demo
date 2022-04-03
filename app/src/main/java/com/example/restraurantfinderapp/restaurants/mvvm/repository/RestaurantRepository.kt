@@ -21,7 +21,8 @@ import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
     private val restaurantUseCase: RestaurantUseCase,
-    appDatabaseHolder: AppDatabaseHolder) {
+    appDatabaseHolder: AppDatabaseHolder
+) {
     private val restaurantDb = appDatabaseHolder.restaurantDb
 
     private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
@@ -37,7 +38,7 @@ class RestaurantRepository @Inject constructor(
                 ) {
                     var restaurants: ArrayList<Restaurant>
                     restaurants = ArrayList()
-                    if(ApiKeys().pageToken.isEmpty()){
+                    if (ApiKeys().pageToken.isEmpty()) {
                         restaurants = ArrayList()
                     }
                     if (response.isSuccessful) {
@@ -87,8 +88,8 @@ class RestaurantRepository @Inject constructor(
         apiKeys.pageToken = nearbyRestaurantSearchResp.next_page_token.toString()
         for (restaurantJsonObject in nearbyRestaurantSearchResp.results!!) {
             var isFavorite = false
-            val restaurantDBObj: RestaurantEntity? = restaurantDb.restaurantDao().
-                findByReference(restaurantJsonObject.reference)
+            val restaurantDBObj: RestaurantEntity? =
+                restaurantDb.restaurantDao().findByReference(restaurantJsonObject.reference)
             restaurantDBObj?.let {
                 isFavorite = restaurantDBObj.favorite
             }
