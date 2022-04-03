@@ -24,7 +24,6 @@ class RestaurantRepository @Inject constructor(
     appDatabaseHolder: AppDatabaseHolder
 ) {
     private val restaurantDb = appDatabaseHolder.restaurantDb
-
     private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
 
     fun requestRestaurants(
@@ -76,7 +75,6 @@ class RestaurantRepository @Inject constructor(
                 getRestaurantsFromJsonObject(nearbyRestaurantSearchResp, restaurants)
                 restaurantList.emit(restaurants)
             }
-
         }
     }
 

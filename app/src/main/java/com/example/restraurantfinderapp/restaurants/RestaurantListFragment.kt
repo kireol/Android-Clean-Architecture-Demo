@@ -3,8 +3,6 @@ package com.example.restraurantfinderapp.restaurants
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,25 +10,24 @@ import androidx.navigation.Navigation
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.ListFragmentBinding
-import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.example.restraurantfinderapp.restaurants.mvvm.models.BindableRecyclerViewAdapter
+import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class RestaurantListFragment : Fragment() {
-    private var _binding: ListFragmentBinding? = null
-    private val binding get() = _binding!!
-    private val swipeContainer: SwipeRefreshLayout? = null
-
     @Inject
     lateinit var location: GPSLocation
 
-    private val restaurantsViewModel: RestaurantListViewModel by activityViewModels()
-
+    private var _binding: ListFragmentBinding? = null
+    private val binding get() = _binding!!
+    private val swipeContainer: SwipeRefreshLayout? = null
+    private val restaurantListViewModel: RestaurantListViewModel by activityViewModels()
     private var bindableRecyclerViewAdapter: BindableRecyclerViewAdapter =
-        BindableRecyclerViewAdapter { position -> restaurantsViewModel.favoriteClicked(position) }
+        BindableRecyclerViewAdapter { position -> restaurantListViewModel.favoriteClicked(position) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +37,7 @@ class RestaurantListFragment : Fragment() {
         _binding = ListFragmentBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = this
-        binding.viewModel = restaurantsViewModel
-
+        binding.viewModel = restaurantListViewModel
         binding.itemList.adapter = bindableRecyclerViewAdapter
 
         return binding.root
@@ -68,14 +64,17 @@ class RestaurantListFragment : Fragment() {
         setToMapButtonListener()
         setSearchButtonListener()
         setDataReadyListener()
-        restaurantsViewModel.data.observe(viewLifecycleOwner) {
+        binding.swipeContainer.isRefreshing = true
+
+        restaurantListViewModel.data.observe(viewLifecycleOwner) {
             bindableRecyclerViewAdapter.updateItems(it)
         }
     }
 
     private fun setDataReadyListener() {
-        restaurantsViewModel.restaurants.observe(viewLifecycleOwner) {
-            binding.indeterminateProgressIndicator.visibility = INVISIBLE
+        restaurantListViewModel.restaurants.observe(viewLifecycleOwner) {
+            binding.swipeContainer.isRefreshing = false
+
             binding.sendButton.isEnabled = true
             binding.sendButton.isClickable = true
             binding.listButtonBg.isEnabled = true
@@ -85,7 +84,7 @@ class RestaurantListFragment : Fragment() {
 
     private fun setSearchButtonListener() {
         binding.sendButton.setOnClickListener {
-            binding.indeterminateProgressIndicator.visibility = VISIBLE
+            binding.swipeContainer.isRefreshing = true
             fetchRestaurants()
         }
     }
@@ -107,9 +106,9 @@ class RestaurantListFragment : Fragment() {
 
     private fun fetchRestaurants() {
         if (binding.searchQuery.text.toString().isNotEmpty()) {
-            restaurantsViewModel.fetchRestaurants(binding.searchQuery.text.toString())
+            restaurantListViewModel.fetchRestaurants(binding.searchQuery.text.toString())
         } else {
-            restaurantsViewModel.fetchRestaurants()
+            restaurantListViewModel.fetchRestaurants()
         }
     }
 
@@ -117,5 +116,6 @@ class RestaurantListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
 

@@ -61,15 +61,6 @@
                 tools:listitem="@layout/item_restaurant" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <ProgressBar
-            android:id="@+id/indeterminate_progress_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/swipeContainer"
-            app:layout_constraintEnd_toEndOf="@id/swipeContainer"
-            app:layout_constraintStart_toStartOf="@id/swipeContainer"
-            app:layout_constraintTop_toTopOf="@id/swipeContainer" />
-
         <ImageView
             android:id="@+id/list_button_bg"
             android:layout_width="150dp"
