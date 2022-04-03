@@ -12,6 +12,7 @@ import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.ListFragmentBinding
 import com.example.restraurantfinderapp.restaurants.mvvm.models.BindableRecyclerViewAdapter
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
+import com.example.restraurantfinderapp.restaurants.mvvm.models.RestaurantHolder
 import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,13 +22,15 @@ import javax.inject.Inject
 class RestaurantListFragment : Fragment() {
     @Inject
     lateinit var location: GPSLocation
+    @Inject
+    lateinit var restaurantHolder: RestaurantHolder
 
     private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
     private val swipeContainer: SwipeRefreshLayout? = null
     private val restaurantListViewModel: RestaurantListViewModel by activityViewModels()
     private var bindableRecyclerViewAdapter: BindableRecyclerViewAdapter =
-        BindableRecyclerViewAdapter { position -> restaurantListViewModel.favoriteClicked(position) }
+        BindableRecyclerViewAdapter { position -> restaurantListViewModel.updateFavorite(position) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,13 +75,17 @@ class RestaurantListFragment : Fragment() {
     }
 
     private fun setDataReadyListener() {
-        restaurantListViewModel.restaurants.observe(viewLifecycleOwner) {
-            binding.swipeContainer.isRefreshing = false
+        restaurantHolder.restaurants.observe(viewLifecycleOwner) {
+            restaurantHolder.restaurants.value?.let { restaurants->
+                if(restaurants.size > 0) {
+                    binding.swipeContainer.isRefreshing = false
 
-            binding.sendButton.isEnabled = true
-            binding.sendButton.isClickable = true
-            binding.listButtonBg.isEnabled = true
-            binding.listButtonBg.isClickable = true
+                    binding.sendButton.isEnabled = true
+                    binding.sendButton.isClickable = true
+                    binding.listButtonBg.isEnabled = true
+                    binding.listButtonBg.isClickable = true
+                }
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.restraurantfinderapp.restaurants.mvvm.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.example.restraurantfinderapp.RestaurantFinderApplication
 import com.example.restraurantfinderapp.restaurants.database.AppDatabaseHolder
 import com.example.restraurantfinderapp.restaurants.database.RestaurantEntity
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
+import com.example.restraurantfinderapp.restaurants.mvvm.models.RestaurantHolder
 import com.example.restraurantfinderapp.restaurants.mvvm.repository.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -20,13 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RestaurantListViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
-    private val appDatabaseHolder: AppDatabaseHolder
+    private val appDatabaseHolder: AppDatabaseHolder,
+    val restaurantHolder: RestaurantHolder
 ) : ViewModel() {
-    val data: LiveData<List<ItemViewModel>>
+    val data: MutableLiveData<List<ItemViewModel>?>
         get() = _data
-    private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
+    private val _data = MutableLiveData<List<ItemViewModel>?>(emptyList())
 
-    var restaurants: MutableLiveData<ArrayList<Restaurant>> = MutableLiveData()
 
     init {
         setDataCollection()
@@ -39,13 +39,17 @@ class RestaurantListViewModel @Inject constructor(
     private fun setDataCollection() {
         viewModelScope.launch {
             restaurantRepository.getResults().collect { it ->
-                restaurants.postValue(it)
-                val restaurantsByFavorite = it.groupBy {
+                restaurantHolder.restaurants.value?.addAll(it.value as Collection<Restaurant>)
+                val restaurantsByFavorite = it.value?.groupBy {
                     it.isFavorite
                 }
 
-                val viewData = createViewData(restaurantsByFavorite)
-                _data.postValue(viewData)
+                val viewData = restaurantsByFavorite?.let { restaurants ->
+                    createViewData(restaurants)
+                }
+                viewData?.let {
+                    _data.postValue(viewData)
+                }
             }
         }
     }
@@ -68,14 +72,14 @@ class RestaurantListViewModel @Inject constructor(
         return viewData
     }
 
-    fun favoriteClicked(position: Int) {
-        restaurants.value?.get(position)?.let {
+    fun updateFavorite(position: Int) {
+        restaurantHolder.restaurants.value?.get(position)?.let {
             it.isFavorite = !it.isFavorite
             val restaurant = _data.value?.get(position) as Restaurant
             restaurant.isFavorite = it.isFavorite
         }
         val restaurantDao = appDatabaseHolder.restaurantDb.restaurantDao()
-        restaurants.value?.let {
+        restaurantHolder.restaurants.value?.let {
             val restaurant = it[position]
             CoroutineScope(Dispatchers.IO).launch {
                 val restaurantDBObj: RestaurantEntity? =

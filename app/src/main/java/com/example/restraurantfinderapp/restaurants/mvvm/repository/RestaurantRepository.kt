@@ -1,6 +1,7 @@
 package com.example.restraurantfinderapp.restaurants.mvvm.repository
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.restraurantfinderapp.restaurants.api.RestaurantUseCase
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.ApiKeys
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.Business
@@ -8,6 +9,7 @@ import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyResta
 import com.example.restraurantfinderapp.restaurants.database.AppDatabaseHolder
 import com.example.restraurantfinderapp.restaurants.database.RestaurantEntity
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
+import com.example.restraurantfinderapp.restaurants.mvvm.models.RestaurantHolder
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +23,10 @@ import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
     private val restaurantUseCase: RestaurantUseCase,
-    appDatabaseHolder: AppDatabaseHolder
+    private val appDatabaseHolder: AppDatabaseHolder,
+    var restaurantHolder: RestaurantHolder
 ) {
-    private val restaurantDb = appDatabaseHolder.restaurantDb
-    private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
+    private val restaurantList = MutableSharedFlow<MutableLiveData<ArrayList<Restaurant>>>()
 
     fun requestRestaurants(
         keyword: String
@@ -35,13 +37,8 @@ class RestaurantRepository @Inject constructor(
                     call: Call<NearbyRestaurantSearchResp?>,
                     response: Response<NearbyRestaurantSearchResp?>
                 ) {
-                    var restaurants: ArrayList<Restaurant>
-                    restaurants = ArrayList()
-                    if (ApiKeys().pageToken.isEmpty()) {
-                        restaurants = ArrayList()
-                    }
                     if (response.isSuccessful) {
-                        processSuccessfulResults(response, restaurants)
+                        processSuccessfulResults(response, restaurantHolder.restaurants)
                     } else {
                         Log.e("Retrofit", response.code().toString())
                     }
@@ -54,13 +51,13 @@ class RestaurantRepository @Inject constructor(
         )
     }
 
-    fun getResults(): MutableSharedFlow<ArrayList<Restaurant>> {
+    fun getResults(): MutableSharedFlow<MutableLiveData<ArrayList<Restaurant>>> {
         return restaurantList
     }
 
     private fun processSuccessfulResults(
         response: Response<NearbyRestaurantSearchResp?>,
-        restaurants: ArrayList<Restaurant>
+        restaurants: MutableLiveData<ArrayList<Restaurant>>
     ) {
         val gson = GsonBuilder().setPrettyPrinting().create()
 
@@ -72,30 +69,34 @@ class RestaurantRepository @Inject constructor(
                     NearbyRestaurantSearchResp::class.java
                 )
             CoroutineScope(Dispatchers.IO).launch {
-                getRestaurantsFromJsonObject(nearbyRestaurantSearchResp, restaurants)
+                getRestaurantsFromJsonObject(nearbyRestaurantSearchResp)
                 restaurantList.emit(restaurants)
             }
         }
     }
 
     private fun getRestaurantsFromJsonObject(
-        nearbyRestaurantSearchResp: NearbyRestaurantSearchResp,
-        restaurants: ArrayList<Restaurant>
-    ): ArrayList<Restaurant> {
+        nearbyRestaurantSearchResp: NearbyRestaurantSearchResp
+    ){
         val apiKeys = ApiKeys()
         apiKeys.pageToken = nearbyRestaurantSearchResp.next_page_token.toString()
-        for (restaurantJsonObject in nearbyRestaurantSearchResp.results!!) {
-            var isFavorite = false
-            val restaurantDBObj: RestaurantEntity? =
-                restaurantDb.restaurantDao().findByReference(restaurantJsonObject.reference)
-            restaurantDBObj?.let {
-                isFavorite = restaurantDBObj.favorite
+        nearbyRestaurantSearchResp.results?.let {restaurantsFromResponse->
+            for (restaurantJsonObject in restaurantsFromResponse) {
+                var isFavorite = false
+                appDatabaseHolder.restaurantDb
+                val restaurantDBObj: RestaurantEntity? =
+                    appDatabaseHolder.restaurantDb.restaurantDao().findByReference(restaurantJsonObject.reference)
+                restaurantDBObj?.let {
+                    isFavorite = restaurantDBObj.favorite
+                }
+                restaurantHolder.restaurants.value?.add(jsonToRestaurant(restaurantJsonObject, isFavorite))
             }
-            restaurants.add(jsonToRestaurant(restaurantJsonObject, isFavorite))
         }
-        restaurants.sortWith(compareBy<Restaurant> { it.isFavorite }.thenBy { it.rating })
-        restaurants.reverse()
-        return restaurants
+        restaurantHolder.restaurants.value?.let{ restaurantList ->
+            restaurantList.sortWith(compareBy<Restaurant> { it.isFavorite }.thenBy { it.rating })
+            restaurantList.reverse()
+            restaurantHolder.restaurants.postValue(restaurantList)
+        }
     }
 
     private fun jsonToRestaurant(

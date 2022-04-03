@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.FragmentItemDetailBinding
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
-import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel
+import com.example.restraurantfinderapp.restaurants.mvvm.models.RestaurantHolder
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -27,12 +26,11 @@ import javax.inject.Inject
 class RestaurantMapFragment : Fragment() {
     @Inject
     lateinit var location: GPSLocation
+    @Inject
+    lateinit var restaurantHolder: RestaurantHolder
 
     private lateinit var _binding: FragmentItemDetailBinding
-
     private var cameraWasSet = false
-
-    private val restaurantsViewModel: RestaurantListViewModel by activityViewModels()
     private var googleMap: GoogleMap? = null
 
     override fun onCreateView(
@@ -102,7 +100,7 @@ class RestaurantMapFragment : Fragment() {
     }
 
     private fun addRestaurantPins() {
-        for (restaurant in restaurantsViewModel.restaurants.value!!) {
+        for (restaurant in restaurantHolder.restaurants.value!!) {
             val restaurantLocation = LatLng(restaurant.latitude, restaurant.longitude)
             googleMap!!.addMarker(
                 MarkerOptions().icon(
