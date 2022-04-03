@@ -23,7 +23,10 @@ class RestaurantRepository @Inject constructor(
     appDatabaseHolder: AppDatabaseHolder
 ) {
     private val restaurantDb = appDatabaseHolder.restaurantDb
-    fun getAllRestaurants(
+
+    private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
+
+    fun requestRestaurants(
         keyword: String
     ) {
         restaurantUseCase.fetchAllRestaurantsFromAPI(keyword,
@@ -46,8 +49,6 @@ class RestaurantRepository @Inject constructor(
             }
         )
     }
-
-    private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
 
     fun getResults(): MutableSharedFlow<ArrayList<Restaurant>> {
         return restaurantList

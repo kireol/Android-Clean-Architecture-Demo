@@ -13,6 +13,14 @@
             android:id="@+id/show_map_detail"
             app:destination="@id/item_detail_fragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.example.restraurantfinderapp.restaurants.fragments.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment">
+    </fragment>
+
     <fragment
         android:id="@+id/item_detail_fragment"
         android:name="com.example.restraurantfinderapp.restaurants.fragments.RestaurantMapFragment"

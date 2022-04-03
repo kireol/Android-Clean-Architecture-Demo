@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="itemViewModel"
+            type="com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantItemViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/row_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/layout_border"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/navigate_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/restaurant_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/restaurant_icon"
+                android:src="@drawable/restaurant_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/restaurant_name"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="#222222"
+                android:ellipsize="end"
+                android:textSize="20sp"
+                android:lines="1"
+                android:text="@{itemViewModel.name}"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintStart_toEndOf="@id/restaurant_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="#7a7d7b"
+                android:textSize="12sp"
+                android:text="@{itemViewModel.rating}"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintStart_toEndOf="@id/restaurant_icon"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/favorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:src="@{itemViewModel.favorite ? @drawable/ic_heart_on : @drawable/ic_heart_off}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/favorite_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

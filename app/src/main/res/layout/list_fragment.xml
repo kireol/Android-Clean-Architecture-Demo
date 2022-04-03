@@ -1,89 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Adding the same root's ID for view binding as other layout configurations -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_list_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/container_horizontal_margin"
-    android:layout_marginEnd="@dimen/container_horizontal_margin">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditText
-        android:id="@+id/search_query"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:autofillHints="search text"
-        android:ellipsize="end"
-        android:hint="@string/search"
-        android:inputType="text"
-        android:lines="1"
-        android:maxLines="1"
-        android:scrollHorizontally="true"
-        app:layout_constraintEnd_toStartOf="@id/send_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantListViewModel" />
+    </data>
 
-    <Button
-        android:id="@+id/send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="@string/send"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/item_list_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/list_button_bg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_query"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/item_list"
-            android:name="com.example.restraurantfinderapp.ItemListFragment"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/container_horizontal_margin"
+        android:layout_marginEnd="@dimen/container_horizontal_margin">
+
+        <EditText
+            android:id="@+id/search_query"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints="search text"
+            android:ellipsize="end"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            app:layout_constraintEnd_toStartOf="@id/send_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/list_button_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_query">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_list"
+                android:name="com.example.restraurantfinderapp.ItemListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.example.restraurantfinderapp.ItemDetailHostActivity"
+                tools:listitem="@layout/item_restaurant" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/indeterminate_progress_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/swipeContainer"
+            app:layout_constraintEnd_toEndOf="@id/swipeContainer"
+            app:layout_constraintStart_toStartOf="@id/swipeContainer"
+            app:layout_constraintTop_toTopOf="@id/swipeContainer" />
+
+        <ImageView
+            android:id="@+id/list_button_bg"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.example.restraurantfinderapp.ItemDetailHostActivity"
-            tools:listitem="@layout/item_list_content" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:contentDescription="@string/go_to_map"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/indeterminate_progress_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/swipeContainer"
-        app:layout_constraintEnd_toEndOf="@id/swipeContainer"
-        app:layout_constraintStart_toStartOf="@id/swipeContainer"
-        app:layout_constraintTop_toTopOf="@id/swipeContainer" />
-
-    <ImageView
-        android:id="@+id/list_button_bg"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_selector"
-        android:clickable="true"
-        android:contentDescription="@string/go_to_map"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/list_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/map"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/list_button_bg"
-        app:layout_constraintEnd_toEndOf="@id/list_button_bg"
-        app:layout_constraintStart_toStartOf="@id/list_button_bg"
-        app:layout_constraintTop_toTopOf="@id/list_button_bg" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/list_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/map"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/list_button_bg"
+            app:layout_constraintEnd_toEndOf="@id/list_button_bg"
+            app:layout_constraintStart_toStartOf="@id/list_button_bg"
+            app:layout_constraintTop_toTopOf="@id/list_button_bg" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

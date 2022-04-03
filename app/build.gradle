@@ -38,9 +38,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+
     buildFeatures {
+        dataBinding true
         viewBinding true
     }
+
 }
 
 dependencies {
@@ -66,7 +70,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.test:core:1.4.0"
-    testImplementation "org.mockito:mockito-core:4.0.0"
+    testImplementation "org.mockito:mockito-core:4.3.1"
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
     testImplementation "io.mockk:mockk:1.12.3"
 
@@ -76,6 +80,11 @@ dependencies {
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-ktx:2.4.2")
     implementation("androidx.room:room-paging:2.5.0-alpha01")
+
+    implementation "androidx.compose.ui:ui:1.2.0-alpha06"
+    implementation "androidx.compose.foundation:foundation:1.2.0-alpha06"
+    implementation "androidx.ui:ui-tooling:1.0.0-alpha07"
+    implementation "androidx.compose.material:material:1.2.0-alpha06"
 }
 
 kapt {

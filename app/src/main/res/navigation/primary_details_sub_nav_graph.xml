@@ -7,8 +7,18 @@
     <fragment
         android:id="@+id/fragment_item_detail"
         android:name="com.example.restraurantfinderapp.restaurants.fragments.RestaurantMapFragment"
-        android:label="@string/title_item_detail"
+        android:label="@string/map_view_title"
         tools:layout="@layout/fragment_item_detail">
+        <argument
+            android:name="item_id"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.example.restraurantfinderapp.restaurants.fragments.SettingsFragment"
+        android:label="settings"
+        tools:layout="@layout/settings_fragment">
         <argument
             android:name="item_id"
             android:defaultValue=""

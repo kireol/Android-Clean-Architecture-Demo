@@ -12,7 +12,7 @@ import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.FragmentItemDetailBinding
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
-import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantsViewModel
+import com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantListViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -31,7 +31,8 @@ class RestaurantMapFragment : Fragment() {
     private lateinit var _binding: FragmentItemDetailBinding
 
     private var cameraWasSet = false
-    private val restaurantsViewModel: RestaurantsViewModel by activityViewModels()
+
+    private val restaurantsViewModel: RestaurantListViewModel by activityViewModels()
     private var googleMap: GoogleMap? = null
 
     override fun onCreateView(

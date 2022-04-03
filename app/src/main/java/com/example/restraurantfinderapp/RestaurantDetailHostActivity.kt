@@ -9,11 +9,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -73,6 +76,24 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         checkLocationPermission()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val bundle = Bundle()
+
+        val returnVal = when (item.itemId) {
+            R.id.action_settings -> {
+                Navigation.findNavController(this, R.id.nav_host_fragment_item_detail).navigate(R.id.settings_fragment, bundle)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+        return returnVal
     }
 
     override fun onSupportNavigateUp(): Boolean {
