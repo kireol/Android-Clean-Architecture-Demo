@@ -98,9 +98,9 @@ class RestaurantRepository @Inject constructor(
         isFavorite: Boolean
     ) = Restaurant(
         restaurantJsonObject.name!!,
+        restaurantJsonObject.rating,
         restaurantJsonObject.geometry.location.lat,
         restaurantJsonObject.geometry.location.lng,
-        restaurantJsonObject.rating,
         restaurantJsonObject.user_ratings_total,
         restaurantJsonObject.reference,
         isFavorite

@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.api
+package com.example.restraurantfinderapp.restaurants.api.geogleplaces
 
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyRestaurantSearchResp
 import retrofit2.Call

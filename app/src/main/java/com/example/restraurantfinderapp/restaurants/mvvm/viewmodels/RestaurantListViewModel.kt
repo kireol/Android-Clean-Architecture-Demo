@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels
+package com.example.restraurantfinderapp.restaurants.mvvm.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -55,10 +55,9 @@ class RestaurantListViewModel @Inject constructor(
             val restaurants = restaurantsByFavorite[it]
             restaurants?.forEach { restaurant: Restaurant ->
                 restaurant.let {
-                    val item = RestaurantItemViewModel(
+                    val item = Restaurant(
                         restaurant.name,
-                        restaurant.rating.toString(),
-                        restaurant.isFavorite
+                        restaurant.rating
                     )
                     viewData.add(item)
                 }
@@ -71,8 +70,8 @@ class RestaurantListViewModel @Inject constructor(
     fun favoriteClicked(position: Int) {
         restaurants.value?.get(position)?.let {
             it.isFavorite = !it.isFavorite
-            var restaurant = _data.value?.get(position) as RestaurantItemViewModel
-            restaurant.favorite = it.isFavorite
+            val restaurant = _data.value?.get(position) as Restaurant
+            restaurant.isFavorite = it.isFavorite
         }
         val restaurantDao = appDatabaseHolder.restaurantDb.restaurantDao()
          restaurants.value?.let {

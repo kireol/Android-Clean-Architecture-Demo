@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.fragments
+package com.example.restraurantfinderapp.restaurants
 
 import android.location.Location
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.FragmentItemDetailBinding
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
-import com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantListViewModel
+import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer

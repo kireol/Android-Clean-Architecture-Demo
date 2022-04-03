@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels
+package com.example.restraurantfinderapp.restaurants.mvvm.models
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restraurantfinderapp.BR
 import com.example.restraurantfinderapp.databinding.ItemRestaurantBinding
+import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.ItemViewModel
 import javax.inject.Inject
 
 class BindableRecyclerViewAdapter @Inject constructor(private val onFavoriteChanged: (Int) -> Unit) :

@@ -2,6 +2,7 @@ package com.example.restraurantfinderapp.restaurants.api
 
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.ApiKeys
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyRestaurantSearchResp
+import com.example.restraurantfinderapp.restaurants.api.geogleplaces.PlacesService
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
 import retrofit2.Callback
 import retrofit2.Retrofit

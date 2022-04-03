@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels
+package com.example.restraurantfinderapp.restaurants.mvvm.viewmodels
 
 import androidx.annotation.LayoutRes
 

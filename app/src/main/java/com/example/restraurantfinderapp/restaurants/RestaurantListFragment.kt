@@ -1,4 +1,4 @@
-package com.example.restraurantfinderapp.restaurants.fragments
+package com.example.restraurantfinderapp.restaurants
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.restraurantfinderapp.R
 import com.example.restraurantfinderapp.databinding.ListFragmentBinding
 import com.example.restraurantfinderapp.restaurants.mvvm.models.GPSLocation
-import com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.BindableRecyclerViewAdapter
-import com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantListViewModel
+import com.example.restraurantfinderapp.restaurants.mvvm.models.BindableRecyclerViewAdapter
+import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

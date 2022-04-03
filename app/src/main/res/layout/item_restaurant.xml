@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="itemViewModel"
-            type="com.example.restraurantfinderapp.restaurants.mvvm.models.itemviewmodels.RestaurantItemViewModel" />
+            type="com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row_container"
@@ -60,7 +59,7 @@
                 android:layout_marginStart="5dp"
                 android:textColor="#7a7d7b"
                 android:textSize="12sp"
-                android:text="@{itemViewModel.rating}"
+                android:text="@{Double.toString(itemViewModel.rating)}"
                 android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintStart_toEndOf="@id/restaurant_icon"
                 app:layout_constraintBottom_toBottomOf="parent"/>
