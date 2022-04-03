@@ -32,6 +32,10 @@ Run and install
 * compose - programmatic layouts
 
 ## TODO: Features to be added
+flash on favorites
+pull to refresh not stopping
+move restaurants to a holder
+
 
 * 2 way data binding https://developer.android.com/topic/libraries/data-binding/two-way
 * diffutils algorithm in android in recycler view https://developer.android.com/codelabs/kotlin-android-training-diffutil-databinding#3

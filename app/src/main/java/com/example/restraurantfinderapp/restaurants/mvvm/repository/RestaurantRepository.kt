@@ -2,6 +2,7 @@ package com.example.restraurantfinderapp.restaurants.mvvm.repository
 
 import android.util.Log
 import com.example.restraurantfinderapp.restaurants.api.RestaurantUseCase
+import com.example.restraurantfinderapp.restaurants.api.geogleplaces.ApiKeys
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.Business
 import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyRestaurantSearchResp
 import com.example.restraurantfinderapp.restaurants.database.AppDatabaseHolder
@@ -20,8 +21,7 @@ import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
     private val restaurantUseCase: RestaurantUseCase,
-    appDatabaseHolder: AppDatabaseHolder
-) {
+    appDatabaseHolder: AppDatabaseHolder) {
     private val restaurantDb = appDatabaseHolder.restaurantDb
 
     private val restaurantList = MutableSharedFlow<ArrayList<Restaurant>>()
@@ -35,7 +35,11 @@ class RestaurantRepository @Inject constructor(
                     call: Call<NearbyRestaurantSearchResp?>,
                     response: Response<NearbyRestaurantSearchResp?>
                 ) {
-                    val restaurants: ArrayList<Restaurant> = ArrayList()
+                    var restaurants: ArrayList<Restaurant>
+                    restaurants = ArrayList()
+                    if(ApiKeys().pageToken.isEmpty()){
+                        restaurants = ArrayList()
+                    }
                     if (response.isSuccessful) {
                         processSuccessfulResults(response, restaurants)
                     } else {
@@ -79,6 +83,8 @@ class RestaurantRepository @Inject constructor(
         nearbyRestaurantSearchResp: NearbyRestaurantSearchResp,
         restaurants: ArrayList<Restaurant>
     ): ArrayList<Restaurant> {
+        val apiKeys = ApiKeys()
+        apiKeys.pageToken = nearbyRestaurantSearchResp.next_page_token.toString()
         for (restaurantJsonObject in nearbyRestaurantSearchResp.results!!) {
             var isFavorite = false
             val restaurantDBObj: RestaurantEntity? = restaurantDb.restaurantDao().

@@ -2,7 +2,8 @@ package com.example.restraurantfinderapp.restaurants.api.geogleplaces
 
 data class NearbyRestaurantSearchResp(
     val results: List<Business>?,
-    val status: String?
+    val status: String?,
+    val next_page_token: String?
 )
 
 data class Business(

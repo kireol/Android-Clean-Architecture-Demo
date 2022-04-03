@@ -24,13 +24,13 @@ class RestaurantUseCase @Inject constructor(private val gpsLocation: GPSLocation
 
         val location = gpsLocation.getLocationFromGPSLocation().first.toString() +
                 "," + gpsLocation.getLocationFromGPSLocation().second.toString()
-
         val call = service.getRestaurants(
             location,
             keyword,
             "restaurant",
             apiKeys.googlePlacesKey.value,
-            "1500"
+            "1500",
+            ApiKeys().pageToken
         )
         call?.enqueue(callback)
     }

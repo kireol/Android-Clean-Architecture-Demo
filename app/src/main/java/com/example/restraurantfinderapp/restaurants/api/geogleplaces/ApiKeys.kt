@@ -7,4 +7,5 @@ import javax.inject.Singleton
 @Singleton
 class ApiKeys @Inject constructor(){
     val googlePlacesKey : MutableLiveData<String> = MutableLiveData()
+    var pageToken : String = ""
 }

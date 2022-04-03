@@ -27,6 +27,7 @@ class RestaurantListViewModel @Inject constructor(
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
     var restaurants: MutableLiveData<ArrayList<Restaurant>> = MutableLiveData()
+
     init {
         setDataCollection()
     }
@@ -74,8 +75,8 @@ class RestaurantListViewModel @Inject constructor(
             restaurant.isFavorite = it.isFavorite
         }
         val restaurantDao = appDatabaseHolder.restaurantDb.restaurantDao()
-         restaurants.value?.let {
-             val restaurant = it[position]
+        restaurants.value?.let {
+            val restaurant = it[position]
             CoroutineScope(Dispatchers.IO).launch {
                 val restaurantDBObj: RestaurantEntity? =
                     restaurantDao.findByReference(restaurant.reference)
