@@ -32,9 +32,8 @@ Run and install
 * compose - programmatic layouts
 
 ## TODO: Features to be added
-move restaurants to a holder
-remove !!
 
+* Fix reload on list frag onstart
 * 2 way data binding https://developer.android.com/topic/libraries/data-binding/two-way
 * diffutils algorithm in android in recycler view https://developer.android.com/codelabs/kotlin-android-training-diffutil-databinding#3
 * use paging token from places api

@@ -26,6 +26,7 @@ import javax.inject.Inject
 class RestaurantMapFragment : Fragment() {
     @Inject
     lateinit var location: GPSLocation
+
     @Inject
     lateinit var restaurantHolder: RestaurantHolder
 
@@ -100,14 +101,16 @@ class RestaurantMapFragment : Fragment() {
     }
 
     private fun addRestaurantPins() {
-        for (restaurant in restaurantHolder.restaurants.value!!) {
-            val restaurantLocation = LatLng(restaurant.latitude, restaurant.longitude)
-            googleMap!!.addMarker(
-                MarkerOptions().icon(
-                    BitmapDescriptorFactory.defaultMarker(getRestaurantPinColor(restaurant))
-                ).position(restaurantLocation).title(restaurant.name)
-                    .snippet(getFavoriteString(restaurant))
-            )
+        restaurantHolder.restaurants.value?.let { restaurants ->
+            for (restaurant in restaurants) {
+                val restaurantLocation = LatLng(restaurant.latitude, restaurant.longitude)
+                googleMap?.addMarker(
+                    MarkerOptions().icon(
+                        BitmapDescriptorFactory.defaultMarker(getRestaurantPinColor(restaurant))
+                    ).position(restaurantLocation).title(restaurant.name)
+                        .snippet(getFavoriteString(restaurant))
+                )
+            }
         }
     }
 
@@ -127,7 +130,7 @@ class RestaurantMapFragment : Fragment() {
 
     private fun addYourLocationPin(lastLocation: Location): LatLng {
         val currentLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
-        googleMap!!.addMarker(
+        googleMap?.addMarker(
             MarkerOptions().position(currentLocation)
                 .title(getString(R.string.your_location))
                 .snippet(getString(R.string.you_are_here))
@@ -139,7 +142,7 @@ class RestaurantMapFragment : Fragment() {
         if (!cameraWasSet) {
             val cameraPosition =
                 CameraPosition.Builder().target(currentLocation).zoom(12f).build()
-            googleMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             cameraWasSet = true
         }
     }

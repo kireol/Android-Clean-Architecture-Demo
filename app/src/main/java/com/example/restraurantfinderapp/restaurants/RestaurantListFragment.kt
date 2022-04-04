@@ -17,11 +17,11 @@ import com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantLi
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class RestaurantListFragment : Fragment() {
     @Inject
     lateinit var location: GPSLocation
+
     @Inject
     lateinit var restaurantHolder: RestaurantHolder
 
@@ -76,8 +76,8 @@ class RestaurantListFragment : Fragment() {
 
     private fun setDataReadyListener() {
         restaurantHolder.restaurants.observe(viewLifecycleOwner) {
-            restaurantHolder.restaurants.value?.let { restaurants->
-                if(restaurants.size > 0) {
+            restaurantHolder.restaurants.value?.let { restaurants ->
+                if (restaurants.size > 0) {
                     binding.swipeContainer.isRefreshing = false
 
                     binding.sendButton.isEnabled = true
