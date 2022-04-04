@@ -21,7 +21,7 @@ import javax.inject.Inject
 class RestaurantListViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
     private val appDatabaseHolder: AppDatabaseHolder,
-    val restaurantHolder: RestaurantHolder
+    private val restaurantHolder: RestaurantHolder
 ) : ViewModel() {
     val data: MutableLiveData<List<ItemViewModel>?>
         get() = _data
@@ -39,7 +39,18 @@ class RestaurantListViewModel @Inject constructor(
     private fun setDataCollection() {
         viewModelScope.launch {
             restaurantRepository.getResults().collect { it ->
-                restaurantHolder.restaurants.value?.addAll(it.value as Collection<Restaurant>)
+                val needsAdded: ArrayList<Restaurant> = arrayListOf()
+                it.value?.let{ restaurantList->
+                    for(restaurant in restaurantList){
+                        if(restaurantHolder.restaurants.value?.contains(restaurant) != true){
+                            needsAdded.add(restaurant)
+                        }
+                    }
+                    restaurantHolder.restaurants.postValue(needsAdded)
+                }
+                if(needsAdded.size == 0) {
+                    restaurantHolder.restaurants.forceRefresh()
+                }
                 val restaurantsByFavorite = it.value?.groupBy {
                     it.isFavorite
                 }
@@ -52,6 +63,10 @@ class RestaurantListViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun <T> MutableLiveData<T>.forceRefresh() {
+        this.value = this.value
     }
 
     private fun createViewData(restaurantsByFavorite: Map<Boolean, List<Restaurant>>): List<ItemViewModel> {

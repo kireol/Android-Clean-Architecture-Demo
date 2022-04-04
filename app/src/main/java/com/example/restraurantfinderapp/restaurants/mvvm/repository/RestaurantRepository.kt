@@ -9,7 +9,6 @@ import com.example.restraurantfinderapp.restaurants.api.geogleplaces.NearbyResta
 import com.example.restraurantfinderapp.restaurants.database.AppDatabaseHolder
 import com.example.restraurantfinderapp.restaurants.database.RestaurantEntity
 import com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant
-import com.example.restraurantfinderapp.restaurants.mvvm.models.RestaurantHolder
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +22,9 @@ import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
     private val restaurantUseCase: RestaurantUseCase,
-    private val appDatabaseHolder: AppDatabaseHolder,
-    var restaurantHolder: RestaurantHolder
+    private val appDatabaseHolder: AppDatabaseHolder
 ) {
+    private var restaurants: MutableLiveData<ArrayList<Restaurant>> = MutableLiveData(arrayListOf())
     private val restaurantList = MutableSharedFlow<MutableLiveData<ArrayList<Restaurant>>>()
 
     fun requestRestaurants(
@@ -38,7 +37,7 @@ class RestaurantRepository @Inject constructor(
                     response: Response<NearbyRestaurantSearchResp?>
                 ) {
                     if (response.isSuccessful) {
-                        processSuccessfulResults(response, restaurantHolder.restaurants)
+                        processSuccessfulResults(response)
                     } else {
                         Log.e("Retrofit", response.code().toString())
                     }
@@ -56,8 +55,7 @@ class RestaurantRepository @Inject constructor(
     }
 
     private fun processSuccessfulResults(
-        response: Response<NearbyRestaurantSearchResp?>,
-        restaurants: MutableLiveData<ArrayList<Restaurant>>
+        response: Response<NearbyRestaurantSearchResp?>
     ) {
         val gson = GsonBuilder().setPrettyPrinting().create()
 
@@ -77,25 +75,27 @@ class RestaurantRepository @Inject constructor(
 
     private fun getRestaurantsFromJsonObject(
         nearbyRestaurantSearchResp: NearbyRestaurantSearchResp
-    ){
+    ) {
         val apiKeys = ApiKeys()
         apiKeys.pageToken = nearbyRestaurantSearchResp.next_page_token.toString()
-        nearbyRestaurantSearchResp.results?.let {restaurantsFromResponse->
+        restaurants = MutableLiveData(arrayListOf())
+
+        nearbyRestaurantSearchResp.results?.let { restaurantsFromResponse ->
             for (restaurantJsonObject in restaurantsFromResponse) {
                 var isFavorite = false
                 appDatabaseHolder.restaurantDb
                 val restaurantDBObj: RestaurantEntity? =
-                    appDatabaseHolder.restaurantDb.restaurantDao().findByReference(restaurantJsonObject.reference)
+                    appDatabaseHolder.restaurantDb.restaurantDao()
+                        .findByReference(restaurantJsonObject.reference)
                 restaurantDBObj?.let {
                     isFavorite = restaurantDBObj.favorite
                 }
-                restaurantHolder.restaurants.value?.add(jsonToRestaurant(restaurantJsonObject, isFavorite))
+                restaurants.value?.add(jsonToRestaurant(restaurantJsonObject, isFavorite))
             }
         }
-        restaurantHolder.restaurants.value?.let{ restaurantList ->
+        restaurants.value?.let { restaurantList ->
             restaurantList.sortWith(compareBy<Restaurant> { it.isFavorite }.thenBy { it.rating })
             restaurantList.reverse()
-            restaurantHolder.restaurants.postValue(restaurantList)
         }
     }
 

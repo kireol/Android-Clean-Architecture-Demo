@@ -61,7 +61,7 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        apikey.googlePlacesKey.postValue(resources.getString (R.string.google_places_api_key))
+        apikey.googlePlacesKey.postValue(resources.getString(R.string.google_places_api_key))
 
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -88,7 +88,8 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
 
         val returnVal = when (item.itemId) {
             R.id.action_settings -> {
-                Navigation.findNavController(this, R.id.nav_host_fragment_item_detail).navigate(R.id.settings_fragment, bundle)
+                Navigation.findNavController(this, R.id.nav_host_fragment_item_detail)
+                    .navigate(R.id.settings_fragment, bundle)
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -137,14 +138,14 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                showAlertDialong()
+                showAlertDialog()
             } else {
                 requestLocationPermission()
             }
         }
     }
 
-    private fun showAlertDialong() {
+    private fun showAlertDialog() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.permission_dialog_title))
             .setMessage(getString(R.string.permission_dialog_message))
