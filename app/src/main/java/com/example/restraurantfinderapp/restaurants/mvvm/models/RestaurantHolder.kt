@@ -7,5 +7,4 @@ import javax.inject.Singleton
 @Singleton
 class RestaurantHolder @Inject constructor() {
     var restaurants: MutableLiveData<ArrayList<Restaurant>> = MutableLiveData(arrayListOf())
-
 }

@@ -40,16 +40,16 @@ class RestaurantListViewModel @Inject constructor(
         viewModelScope.launch {
             restaurantRepository.getResults().collect { it ->
                 val needsAdded: ArrayList<Restaurant> = arrayListOf()
-                it.value?.let{ restaurantList->
-                    for(restaurant in restaurantList){
-                        if(restaurantHolder.restaurants.value?.contains(restaurant) != true){
+                it.value?.let { restaurantList ->
+                    for (restaurant in restaurantList) {
+                        if (restaurantHolder.restaurants.value?.contains(restaurant) != true) {
                             needsAdded.add(restaurant)
                         }
                     }
                     needsAdded.addAll(restaurantHolder.restaurants.value as Collection<Restaurant>)
                     restaurantHolder.restaurants.postValue(needsAdded)
                 }
-                if(needsAdded.size == 0) {
+                if (needsAdded.size == 0) {
                     restaurantHolder.restaurants.forceRefresh()
                 }
                 val restaurantsByFavorite = it.value?.groupBy {
