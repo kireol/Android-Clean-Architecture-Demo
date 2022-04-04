@@ -46,6 +46,7 @@ class RestaurantListViewModel @Inject constructor(
                             needsAdded.add(restaurant)
                         }
                     }
+                    needsAdded.addAll(restaurantHolder.restaurants.value as Collection<Restaurant>)
                     restaurantHolder.restaurants.postValue(needsAdded)
                 }
                 if(needsAdded.size == 0) {

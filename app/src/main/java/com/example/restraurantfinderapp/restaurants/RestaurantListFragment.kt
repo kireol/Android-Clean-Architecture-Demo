@@ -69,6 +69,7 @@ class RestaurantListFragment : Fragment() {
         setSearchButtonListener()
         setDataReadyListener()
         binding.swipeContainer.isRefreshing = true
+        var chris = restaurantHolder.restaurants.value
 
         restaurantListViewModel.data.observe(viewLifecycleOwner) {
             bindableRecyclerViewAdapter.updateItems(it)
