@@ -5,7 +5,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.example.restraurantfinderapp.restaurants.mvvm.models.Restaurant" />
+            type="com.example.restaurantfinder.restaurants.mvvm.models.Restaurant" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row_container"

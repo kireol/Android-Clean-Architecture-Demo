@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.restraurantfinderapp.restaurants.mvvm.viewmodels.RestaurantListViewModel" />
+            type="com.example.restaurantfinder.restaurants.mvvm.viewmodels.RestaurantListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
@@ -57,7 +57,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="10dp"
                 app:layoutManager="LinearLayoutManager"
-                tools:context="com.example.restraurantfinderapp.ItemDetailHostActivity"
+                tools:context="com.example.restaurantfinder.ItemDetailHostActivity"
                 tools:listitem="@layout/item_restaurant" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
