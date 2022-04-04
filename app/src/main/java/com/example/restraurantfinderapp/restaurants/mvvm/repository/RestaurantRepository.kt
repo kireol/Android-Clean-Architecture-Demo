@@ -103,7 +103,7 @@ class RestaurantRepository @Inject constructor(
         restaurantJsonObject: Business,
         isFavorite: Boolean
     ) = Restaurant(
-        restaurantJsonObject.name!!,
+        restaurantJsonObject.name,
         restaurantJsonObject.rating,
         restaurantJsonObject.geometry.location.lat,
         restaurantJsonObject.geometry.location.lng,

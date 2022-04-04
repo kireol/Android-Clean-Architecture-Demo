@@ -8,7 +8,7 @@ data class NearbyRestaurantSearchResp(
 
 data class Business(
     val geometry: BusinessGeometry,
-    val name: String?,
+    val name: String,
     val opening_hours: BusinessHours,
     val place_id: String?,
     val rating: Double,
