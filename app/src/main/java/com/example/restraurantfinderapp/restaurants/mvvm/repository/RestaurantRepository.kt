@@ -105,10 +105,10 @@ class RestaurantRepository @Inject constructor(
     ) = Restaurant(
         restaurantJsonObject.name,
         restaurantJsonObject.rating,
+        isFavorite,
         restaurantJsonObject.geometry.location.lat,
         restaurantJsonObject.geometry.location.lng,
         restaurantJsonObject.user_ratings_total,
-        restaurantJsonObject.reference,
-        isFavorite
+        restaurantJsonObject.reference
     )
 }

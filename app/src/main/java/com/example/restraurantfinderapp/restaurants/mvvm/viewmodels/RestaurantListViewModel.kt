@@ -27,7 +27,6 @@ class RestaurantListViewModel @Inject constructor(
         get() = _data
     private val _data = MutableLiveData<List<ItemViewModel>?>(emptyList())
 
-
     init {
         setDataCollection()
     }
@@ -52,11 +51,8 @@ class RestaurantListViewModel @Inject constructor(
                 if (needsAdded.size == 0) {
                     restaurantHolder.restaurants.forceRefresh()
                 }
-                val restaurantsByFavorite = it.value?.groupBy {
-                    it.isFavorite
-                }
 
-                val viewData = restaurantsByFavorite?.let { restaurants ->
+                val viewData = it.value?.let { restaurants ->
                     createViewData(restaurants)
                 }
                 viewData?.let {
@@ -70,19 +66,17 @@ class RestaurantListViewModel @Inject constructor(
         this.value = this.value
     }
 
-    private fun createViewData(restaurantsByFavorite: Map<Boolean, List<Restaurant>>): List<ItemViewModel> {
+    private fun createViewData(restaurantsByFavorite: ArrayList<Restaurant>): List<ItemViewModel> {
         val viewData = mutableListOf<ItemViewModel>()
-        restaurantsByFavorite.keys.forEach {
-            val restaurants = restaurantsByFavorite[it]
-            restaurants?.forEach { restaurant: Restaurant ->
+        restaurantsByFavorite.forEach {restaurant: Restaurant ->
                 restaurant.let {
                     val item = Restaurant(
                         restaurant.name,
-                        restaurant.rating
+                        restaurant.rating,
+                        restaurant.isFavorite
                     )
                     viewData.add(item)
                 }
-            }
         }
 
         return viewData
@@ -93,10 +87,7 @@ class RestaurantListViewModel @Inject constructor(
             it.isFavorite = !it.isFavorite
             val restaurant = _data.value?.get(position) as Restaurant
             restaurant.isFavorite = it.isFavorite
-        }
-        val restaurantDao = appDatabaseHolder.restaurantDb.restaurantDao()
-        restaurantHolder.restaurants.value?.let {
-            val restaurant = it[position]
+            val restaurantDao = appDatabaseHolder.restaurantDb.restaurantDao()
             CoroutineScope(Dispatchers.IO).launch {
                 val restaurantDBObj: RestaurantEntity? =
                     restaurantDao.findByReference(restaurant.reference)
