@@ -76,6 +76,12 @@ class RestaurantDetailHostActivity : AppCompatActivity() {
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         checkLocationPermission()
+
+        lastLocation.location.observe(this){
+            fusedLocationProvider?.let {
+                fusedLocationProvider?.removeLocationUpdates(locationCallback)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -63,7 +63,9 @@ class RestaurantListFragment : Fragment() {
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light
         )
-        setLocationObserver()
+        if(restaurantHolder.restaurants.value?.size  == 0){
+            setLocationObserver()
+        }
         setToMapButtonListener()
         setSearchButtonListener()
         setDataReadyListener()
