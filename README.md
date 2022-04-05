@@ -26,7 +26,7 @@ Run and install
 * Android Permission Requests
 * LiveData - for observing
 * Data Binding
-* Nav Graph - Nav between screens
+* Nav Graph - Nav between screens using Navigation Component
 * Room Db - database/DAO/Layers for sqlite
 * Hilt - Dependency Injection
 * compose - programmatic layouts
