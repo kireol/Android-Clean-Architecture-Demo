@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -11,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.restaurantfinder.R
 import com.example.restaurantfinder.databinding.ListFragmentBinding
 import com.example.restaurantfinder.restaurants.mvvm.models.BoundRecyclerViewAdapter
+import com.example.restaurantfinder.restaurants.mvvm.models.ErrorMessage
 import com.example.restaurantfinder.restaurants.mvvm.models.GPSLocation
 import com.example.restaurantfinder.restaurants.mvvm.models.RestaurantHolder
 import com.example.restaurantfinder.restaurants.mvvm.viewmodels.RestaurantListViewModel
@@ -24,6 +26,9 @@ class RestaurantListFragment : Fragment() {
 
     @Inject
     lateinit var restaurantHolder: RestaurantHolder
+
+    @Inject
+    lateinit var errorMessage: ErrorMessage
 
     private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -73,6 +78,11 @@ class RestaurantListFragment : Fragment() {
 
         restaurantListViewModel.data.observe(viewLifecycleOwner) {
             boundRecyclerViewAdapter.updateItems(it)
+        }
+
+        errorMessage.errorMessage.observe(viewLifecycleOwner) {
+            binding.swipeContainer.isRefreshing = false
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         }
     }
 

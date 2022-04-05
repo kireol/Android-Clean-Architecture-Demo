@@ -18,6 +18,8 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
@@ -26,6 +28,7 @@ class RestaurantRepository @Inject constructor(
 ) {
     private var restaurants: MutableLiveData<ArrayList<Restaurant>> = MutableLiveData(arrayListOf())
     private val restaurantList = MutableSharedFlow<MutableLiveData<ArrayList<Restaurant>>>()
+    private val errorString = MutableSharedFlow<MutableLiveData<String>>()
 
     fun requestRestaurants(
         keyword: String
@@ -40,11 +43,32 @@ class RestaurantRepository @Inject constructor(
                         processSuccessfulResults(response)
                     } else {
                         Log.e("Retrofit", response.code().toString())
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val error: MutableLiveData<String> =
+                                MutableLiveData("Response not successful")
+                            errorString.emit(error)
+                        }
                     }
                 }
 
-                override fun onFailure(call: Call<NearbyRestaurantSearchResp?>, t: Throwable) {
-                    Log.e("Retrofit", "Error getting google places api data")
+                override fun onFailure(call: Call<NearbyRestaurantSearchResp?>, error: Throwable) {
+                    val errorMessage: String = if (error is SocketTimeoutException) {
+                        "Connection Timeout"
+                    } else if (error is IOException) {
+                        "Timeout"
+                    } else {
+                        if (call.isCanceled) {
+                            "Call was cancelled forcefully"
+                        } else {
+                            "Network Error :: {${error.localizedMessage}"
+                        }
+                    }
+
+                    Log.e("Retrofit", "Error getting data: $errorMessage")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val returnedError: MutableLiveData<String> = MutableLiveData(errorMessage)
+                        errorString.emit(returnedError)
+                    }
                 }
             }
         )
@@ -97,6 +121,10 @@ class RestaurantRepository @Inject constructor(
             restaurantList.sortWith(compareBy<Restaurant> { it.isFavorite }.thenBy { it.rating })
             restaurantList.reverse()
         }
+    }
+
+    fun getError(): MutableSharedFlow<MutableLiveData<String>> {
+        return errorString
     }
 
     private fun jsonToRestaurant(

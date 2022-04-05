@@ -7,6 +7,7 @@ import com.example.restaurantfinder.R
 import com.example.restaurantfinder.RestaurantFinderApplication
 import com.example.restaurantfinder.restaurants.database.AppDatabaseHolder
 import com.example.restaurantfinder.restaurants.database.RestaurantEntity
+import com.example.restaurantfinder.restaurants.mvvm.models.ErrorMessage
 import com.example.restaurantfinder.restaurants.mvvm.models.Restaurant
 import com.example.restaurantfinder.restaurants.mvvm.models.RestaurantHolder
 import com.example.restaurantfinder.restaurants.mvvm.repository.RestaurantRepository
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class RestaurantListViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
     private val appDatabaseHolder: AppDatabaseHolder,
-    private val restaurantHolder: RestaurantHolder
+    private val restaurantHolder: RestaurantHolder,
+    private val errorMessage: ErrorMessage
 ) : ViewModel() {
     val data: MutableLiveData<List<ItemViewModel>?>
         get() = _data
@@ -36,6 +38,12 @@ class RestaurantListViewModel @Inject constructor(
     }
 
     private fun setDataCollection() {
+        viewModelScope.launch {
+            restaurantRepository.getError().collect { errorString ->
+                errorMessage.errorMessage.postValue(errorString.value)
+            }
+        }
+
         viewModelScope.launch {
             restaurantRepository.getResults().collect { incomingRestaurants ->
                 val needsAdded: ArrayList<Restaurant> = arrayListOf()
