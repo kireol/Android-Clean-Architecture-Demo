@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.paging.PagingData
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.restaurantfinder.R
 import com.example.restaurantfinder.databinding.ListFragmentBinding
 import com.example.restaurantfinder.restaurants.adapters.BoundRecyclerViewAdapter
@@ -20,6 +19,7 @@ import com.example.restaurantfinder.restaurants.mvvm.models.Restaurant
 import com.example.restaurantfinder.restaurants.mvvm.models.RestaurantHolder
 import com.example.restaurantfinder.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,9 +34,10 @@ class RestaurantListFragment : Fragment() {
     @Inject
     lateinit var errorMessage: ErrorMessage
 
+    private var searchJob: Job? = null
+
     private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
-    private val swipeContainer: SwipeRefreshLayout? = null
     private val restaurantListViewModel: RestaurantListViewModel by activityViewModels()
     private var boundRecyclerViewAdapter: BoundRecyclerViewAdapter =
         BoundRecyclerViewAdapter { position ->
@@ -49,8 +50,6 @@ class RestaurantListFragment : Fragment() {
     ): View {
         _binding = ListFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
-//        binding.lifecycleOwner = this
-//        binding.viewModel = restaurantListViewModel
         binding.itemList.adapter = boundRecyclerViewAdapter
 
         return binding.root
@@ -67,23 +66,15 @@ class RestaurantListFragment : Fragment() {
         binding.swipeContainer.setOnRefreshListener {
             fetchRestaurants()
         }
-        swipeContainer?.setColorSchemeResources(
-            android.R.color.holo_blue_bright,
-            android.R.color.holo_green_light,
-            android.R.color.holo_orange_light,
-            android.R.color.holo_red_light
-        )
+
         if (restaurantHolder.restaurants.value?.size == 0) {
             setLocationObserver()
         }
+
         setToMapButtonListener()
         setSearchButtonListener()
         setDataReadyListener()
         binding.swipeContainer.isRefreshing = true
-
-//        restaurantListViewModel.data.observe(viewLifecycleOwner) {
-//            boundRecyclerViewAdapter.updateItems(it)
-//        }
 
         errorMessage.errorMessage.observe(viewLifecycleOwner) {
             binding.swipeContainer.isRefreshing = false
@@ -138,11 +129,19 @@ class RestaurantListFragment : Fragment() {
     }
 
     private fun fetchRestaurants() {
-        if (binding.searchQuery.text.toString().isNotEmpty()) {
-            restaurantListViewModel.fetchRestaurants(binding.searchQuery.text.toString())
-        } else {
-            restaurantListViewModel.fetchRestaurants()
+        searchJob?.cancel()
+
+        searchJob = lifecycleScope.launch {
+            var searchString: String ? = null
+            if (binding.searchQuery.text.toString().isNotEmpty()) {
+                searchString = binding.searchQuery.text.toString()
+            }
+            restaurantListViewModel.fetchRestaurants(searchString)
+//            .collectLatest{
+//                boundRecyclerViewAdapter.submitData(it)
+//            }
         }
+
     }
 
     override fun onDestroyView() {

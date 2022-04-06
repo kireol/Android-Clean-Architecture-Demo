@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantfinder.databinding.ItemRestaurantBinding
 import com.example.restaurantfinder.restaurants.mvvm.models.Restaurant
-import javax.inject.Inject
 
-
-class BoundRecyclerViewAdapter @Inject constructor(private val onFavoriteChanged: (Int) -> Unit) :
-    PagingDataAdapter<Restaurant, BoundRecyclerViewAdapter.GalleryViewHolder>(GalleryDiffCallback()) {
+class BoundRecyclerViewAdapter(val favoriteClicked: (Int) -> Unit) : PagingDataAdapter<Restaurant,
+        BoundRecyclerViewAdapter.GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         return GalleryViewHolder(
@@ -30,7 +28,8 @@ class BoundRecyclerViewAdapter @Inject constructor(private val onFavoriteChanged
         }
 
         holder.binding.favorite.setOnClickListener {
-            onFavoriteChanged(position)
+//            restaurantListViewModel.updateFavorite(position)
+            favoriteClicked(position)
             notifyItemChanged(position)
         }
 
@@ -39,16 +38,6 @@ class BoundRecyclerViewAdapter @Inject constructor(private val onFavoriteChanged
     class GalleryViewHolder(
         val binding: ItemRestaurantBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-//        init {
-//            binding.setClickListener { view ->
-//                binding.photo?.let { photo ->
-//                    val uri = Uri.parse(photo.user.attributionUrl)
-//                    val intent = Intent(Intent.ACTION_VIEW, uri)
-//                    view.context.startActivity(intent)
-//                }
-//            }
-//        }
-
         fun bind(item: Restaurant) {
             binding.apply {
                 restaurant = item

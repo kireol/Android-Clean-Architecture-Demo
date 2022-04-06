@@ -25,19 +25,17 @@ class RestaurantListViewModel @Inject constructor(
     private val restaurantHolder: RestaurantHolder,
     private val errorMessage: ErrorMessage
 ) : ViewModel() {
-    val data: MutableLiveData<List<ItemViewModel>?>
-        get() = _data
     private val _data = MutableLiveData<List<ItemViewModel>?>(emptyList())
 
     init {
-        setDataCollection()
+        setupDataCollection()
     }
 
-    fun fetchRestaurants(keyword: String = RestaurantFinderApplication.instance.getString(R.string.default_keyword)) {
-        restaurantRepository.requestRestaurants(keyword)
+    fun fetchRestaurants(keyword: String? ) {
+            restaurantRepository.requestRestaurants(keyword?: RestaurantFinderApplication.instance.getString(R.string.default_keyword))
     }
 
-    private fun setDataCollection() {
+    private fun setupDataCollection() {
         viewModelScope.launch {
             restaurantRepository.getError().collect { errorString ->
                 errorMessage.errorMessage.postValue(errorString.value)
@@ -91,6 +89,10 @@ class RestaurantListViewModel @Inject constructor(
     }
 
     fun updateFavorite(position: Int) {
+        updateDb(position)
+    }
+
+    private fun updateDb(position: Int) {
         restaurantHolder.restaurants.value?.get(position)?.let {
             it.isFavorite = !it.isFavorite
             val restaurant = _data.value?.get(position) as Restaurant
