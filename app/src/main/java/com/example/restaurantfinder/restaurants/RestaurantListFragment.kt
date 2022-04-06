@@ -7,16 +7,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.paging.PagingData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.restaurantfinder.R
 import com.example.restaurantfinder.databinding.ListFragmentBinding
-import com.example.restaurantfinder.restaurants.mvvm.models.BoundRecyclerViewAdapter
+import com.example.restaurantfinder.restaurants.adapters.BoundRecyclerViewAdapter
 import com.example.restaurantfinder.restaurants.mvvm.models.ErrorMessage
 import com.example.restaurantfinder.restaurants.mvvm.models.GPSLocation
+import com.example.restaurantfinder.restaurants.mvvm.models.Restaurant
 import com.example.restaurantfinder.restaurants.mvvm.models.RestaurantHolder
 import com.example.restaurantfinder.restaurants.mvvm.viewmodels.RestaurantListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,17 +39,18 @@ class RestaurantListFragment : Fragment() {
     private val swipeContainer: SwipeRefreshLayout? = null
     private val restaurantListViewModel: RestaurantListViewModel by activityViewModels()
     private var boundRecyclerViewAdapter: BoundRecyclerViewAdapter =
-        BoundRecyclerViewAdapter { position -> restaurantListViewModel.updateFavorite(position) }
+        BoundRecyclerViewAdapter { position ->
+            restaurantListViewModel.updateFavorite(position)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = ListFragmentBinding.inflate(inflater, container, false)
-
-        binding.lifecycleOwner = this
-        binding.viewModel = restaurantListViewModel
+        context ?: return binding.root
+//        binding.lifecycleOwner = this
+//        binding.viewModel = restaurantListViewModel
         binding.itemList.adapter = boundRecyclerViewAdapter
 
         return binding.root
@@ -76,9 +81,9 @@ class RestaurantListFragment : Fragment() {
         setDataReadyListener()
         binding.swipeContainer.isRefreshing = true
 
-        restaurantListViewModel.data.observe(viewLifecycleOwner) {
-            boundRecyclerViewAdapter.updateItems(it)
-        }
+//        restaurantListViewModel.data.observe(viewLifecycleOwner) {
+//            boundRecyclerViewAdapter.updateItems(it)
+//        }
 
         errorMessage.errorMessage.observe(viewLifecycleOwner) {
             binding.swipeContainer.isRefreshing = false
@@ -89,6 +94,14 @@ class RestaurantListFragment : Fragment() {
     private fun setDataReadyListener() {
         restaurantHolder.restaurants.observe(viewLifecycleOwner) {
             restaurantHolder.restaurants.value?.let { restaurants ->
+                lifecycleScope.launch {
+                    var pagingData: PagingData<Restaurant> = PagingData.empty()
+                    for (restaurant in restaurants) {
+                        pagingData = PagingData.from(restaurants)
+                    }
+                    boundRecyclerViewAdapter.submitData(pagingData)
+                }
+
                 if (restaurants.size > 0) {
                     binding.swipeContainer.isRefreshing = false
 

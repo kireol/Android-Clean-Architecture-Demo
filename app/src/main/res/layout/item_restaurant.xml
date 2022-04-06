@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="itemViewModel"
+            name="restaurant"
             type="com.example.restaurantfinder.restaurants.mvvm.models.Restaurant" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
                 android:ellipsize="end"
                 android:textSize="20sp"
                 android:lines="1"
-                android:text="@{itemViewModel.name}"
+                android:text="@{restaurant.name}"
                 android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintStart_toEndOf="@id/restaurant_icon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
                 android:layout_marginStart="5dp"
                 android:textColor="#7a7d7b"
                 android:textSize="12sp"
-                android:text="@{Double.toString(itemViewModel.rating)}"
+                android:text="@{Double.toString(restaurant.rating)}"
                 android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintStart_toEndOf="@id/restaurant_icon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="20dp"
-            android:src="@{itemViewModel.favorite ? @drawable/ic_heart_on : @drawable/ic_heart_off}"
+            android:src="@{restaurant.favorite ? @drawable/ic_heart_on : @drawable/ic_heart_off}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
