@@ -27,15 +27,12 @@ import javax.inject.Inject
 class RestaurantListFragment : Fragment() {
     @Inject
     lateinit var location: GPSLocation
-
     @Inject
     lateinit var restaurantHolder: RestaurantHolder
-
     @Inject
     lateinit var errorMessage: ErrorMessage
 
     private var searchJob: Job? = null
-
     private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
     private val restaurantListViewModel: RestaurantListViewModel by activityViewModels()
@@ -108,7 +105,7 @@ class RestaurantListFragment : Fragment() {
     private fun setSearchButtonListener() {
         binding.sendButton.setOnClickListener {
             binding.swipeContainer.isRefreshing = true
-            restaurantHolder.restaurants.value?.clear()
+//            restaurantHolder.restaurants.value?.clear()
             fetchRestaurants()
         }
     }

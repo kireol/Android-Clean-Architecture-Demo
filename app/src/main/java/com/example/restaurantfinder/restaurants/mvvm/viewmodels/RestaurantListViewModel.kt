@@ -3,6 +3,7 @@ package com.example.restaurantfinder.restaurants.mvvm.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.restaurantfinder.R
 import com.example.restaurantfinder.RestaurantFinderApplication
 import com.example.restaurantfinder.restaurants.database.AppDatabaseHolder
@@ -14,6 +15,7 @@ import com.example.restaurantfinder.restaurants.mvvm.repository.RestaurantReposi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,6 +49,10 @@ class RestaurantListViewModel @Inject constructor(
                 val needsAdded: ArrayList<Restaurant> = arrayListOf()
                 incomingRestaurants.value?.let { restaurantList ->
                     for (restaurant in restaurantList) {
+                        var chris = 5
+                        if(chris == 5){
+                            println("chris is 5")
+                        }
                         if (restaurantHolder.restaurants.value?.contains(restaurant) != true) {
                             needsAdded.add(restaurant)
                         }
